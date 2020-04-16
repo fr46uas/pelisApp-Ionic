@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { PeliService } from '../../services/peli.service';
+import { iPelis } from '../../model/iPelis.interface';
 
 @Component({
   selector: 'app-pelis',
@@ -6,10 +9,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./pelis.page.scss'],
 })
 export class PelisPage implements OnInit {
+  results: Observable<iPelis>;
+  term: string = '';
+  type: string = '';
 
-  constructor() { }
+  constructor(private peliService: PeliService) { }
 
   ngOnInit() {
+  }
+
+  searchChanged(): void {
+    this.results = this.peliService.searchMovie(this.term, this.type);
   }
 
 }

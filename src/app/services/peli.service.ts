@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { iPelis } from '../model/iPelis.interface';
@@ -8,14 +8,20 @@ import { iPelis } from '../model/iPelis.interface';
   providedIn: 'root'
 })
 export class PeliService {
+  private url: string = '';
+  private apiKey: string = '5dea4e9e';
 
-  constructor(private http: HttpClientModule) { }
+  constructor(private http: HttpClient) { }
 
-  searchMovie() {
+  searchMovie(title: string, type: string) {
+    this.url = `http://www.omdbapi.com/?s=${encodeURI(title)}&type=${type}&apikey=${this.apiKey}`;
+    console.log(this.url);
+    return this.http.get<iPelis>(this.url).pipe(map(results => results['Search']));
 
   }
 
-  getDetails() {
+  getDetails(id: string) {
+    return this.http.get<iPelis>(`http://www.omdbapi.com/?i=${id}&plot=full&apikey=${this.apiKey}`);
 
   }
 }
